@@ -72,7 +72,17 @@ db.automovil.insertMany([
         Tipo:"Camioneta",
         Capacidad:4,
         Precio_Diario:260000000
-    }
+    },
+    {
+        _id: 5,
+        ID_Automovil: 5,
+        Marca: "Chevrolet Camaro",
+        Modelo:2000,
+        Anio:2020,
+        Tipo:"Automovil",
+        Capacidad:2,
+        Precio_Diario:100000
+    },
 ]);
 
 use("db_campus_alquiler");
@@ -157,7 +167,7 @@ db.alquiler.insertMany([
         Fecha_Inicio: "2023-07-15",
         Fecha_Fin: "2023-07-20",
         Costo_Total: 250.50,
-        Estado: "Confirmado"
+        Estado: "Activo"
     },
     {
         _id: 2,
@@ -167,7 +177,7 @@ db.alquiler.insertMany([
         Fecha_Inicio: "2023-08-05",
         Fecha_Fin: "2023-08-12",
         Costo_Total: 200.50,
-        Estado: "Confirmado"
+        Estado: "Activo"
     },
     {
         _id: 3,
@@ -177,7 +187,7 @@ db.alquiler.insertMany([
         Fecha_Inicio: "2023-09-15",
         Fecha_Fin: "2023-09-20",
         Costo_Total: 300.50,
-        Estado: "Confirmado"
+        Estado: "Inactivo"
     },
     {
         _id: 4,
@@ -187,7 +197,7 @@ db.alquiler.insertMany([
         Fecha_Inicio: "2023-12-20",
         Fecha_Fin: "2023-12-31",
         Costo_Total: 500.50,
-        Estado: "Confirmado"
+        Estado: "Inactivo"
     }
 ]);
 
@@ -201,7 +211,7 @@ db.reserva.insertMany([
         Fecha_Reserva: "2023-07-15",
         Fecha_Inicio: "2024-01-15",
         Fecha_Fin: "2024-01-20",
-        Estado: "Confirmado"
+        Estado: "Pendiente"
     },
     {
         _id: 2,
@@ -211,7 +221,7 @@ db.reserva.insertMany([
         Fecha_Reserva: "2023-09-15",
         Fecha_Inicio: "2024-02-15",
         Fecha_Fin: "2024-02-20",
-        Estado: "Confirmado"
+        Estado: "Pendiente"
     },
     {
         _id: 3,
@@ -245,7 +255,7 @@ db.empleado.insertMany([
         DNI: "64578215",
         Direccion: "Calle 11",
         Telefono: "3225869547",
-        Cargo: "Agente de Entrega"
+        Cargo: "Vendedor"
     },
     {
         _id: 2,
@@ -255,7 +265,7 @@ db.empleado.insertMany([
         DNI: "54879571",
         Direccion: "Calle 11",
         Telefono: "3152568475",
-        Cargo: "Agente de Mantenimiento"
+        Cargo: "Gerente"
     },
     {
         _id: 3,
@@ -265,7 +275,7 @@ db.empleado.insertMany([
         DNI: "1099586475",
         Direccion: "Calle 12",
         Telefono: "3285268475",
-        Cargo: "Agente de Entrega"
+        Cargo: "Vendedor"
     },
     {
         _id: 4,
@@ -275,7 +285,7 @@ db.empleado.insertMany([
         DNI: "10045421685",
         Direccion: "Calle 11",
         Telefono: "3112589516",
-        Cargo: "Agente de Mantenimiento"
+        Cargo: "Asistente"
     }
 ]);
 
@@ -531,3 +541,308 @@ db.registro_entrega.aggregate([
         }
     }
 ]);
+
+/* CONSULTAS */
+
+// Mostrar todos los clientes registrados en la base de datos
+use("db_campus_alquiler");
+db.cliente.find({})
+
+//3. Obtener todos los automóviles disponibles para alquiler.
+use("db_campus_alquiler");
+db.alquiler.aggregate([
+    {
+        $match: {
+          Estado: "Inactivo" 
+        }
+      },
+    {
+        $lookup: {
+          from: "automovil",
+          localField: "ID_Automovil_id",
+          foreignField: "_id",
+          as: "Automovil_Info"
+        }
+    },
+    {
+        $unwind: "$Automovil_Info"
+     },
+    {
+        $project: {
+            "_id":0,
+            "Automovil_Info":1
+        }
+    }
+]);
+
+//4. Listar todos los alquileres activos junto con los datos de los clientes relacionados.
+use("db_campus_alquiler");
+db.alquiler.aggregate([
+    {
+        $match: {
+          Estado: "Activo" 
+        }
+      },
+    {
+        $lookup: {
+          from: "cliente",
+          localField: "ID_Cliente_id",
+          foreignField: "_id",
+          as: "Cliente_Info"
+        }
+    },
+    {
+        $unwind: "$Cliente_Info"
+     },
+    {
+        $project: {
+          "Cliente_Info.ID_Cliente":0,
+        }
+    }
+]);
+
+/* 5. Mostrar todas las reservas pendientes con los datos del cliente
+y el automóvil reservado. */
+use("db_campus_alquiler");
+db.reserva.aggregate([
+    {
+        $match: {
+          Estado: "Pendiente" 
+        }
+      },
+    {
+        $lookup: {
+          from: "cliente",
+          localField: "ID_Cliente_id",
+          foreignField: "_id",
+          as: "Cliente_Info"
+        }
+    },
+    {
+        $unwind: "$Cliente_Info"
+     },
+     {
+        $lookup: {
+          from: "automovil",
+          localField: "ID_Automovil_id",
+          foreignField: "_id",
+          as: "Automovil_Info"
+        }
+    },
+    {
+        $unwind: "$Automovil_Info"
+     },
+    {
+        $project: {
+          "Cliente_Info.ID_Cliente":0,
+          "Automovil_Info.ID_Automovil": 0
+        }
+    }
+]);
+
+/* 6. Obtener los detalles del alquiler con el ID_Alquiler específico. */
+use("db_campus_alquiler");
+db.alquiler.aggregate([
+    {
+        $match: {
+          "_id": 2 
+        }
+      },
+    {
+        $lookup: {
+          from: "cliente",
+          localField: "ID_Cliente_id",
+          foreignField: "_id",
+          as: "Cliente_Info"
+        }
+    },
+    {
+        $unwind: "$Cliente_Info"
+     },
+     {
+        $lookup: {
+          from: "automovil",
+          localField: "ID_Automovil_id",
+          foreignField: "_id",
+          as: "Automovil_Info"
+        }
+    },
+    {
+        $unwind: "$Automovil_Info"
+     },
+    {
+        $project: {
+          "Cliente_Info.ID_Cliente":0,
+          "Automovil_Info.ID_Automovil": 0
+        }
+    }
+]);
+
+/* 7. Listar los empleados con el cargo de "Vendedor". */
+use("db_campus_alquiler");
+db.empleado.find({Cargo: "Vendedor"})
+
+/* 8. Mostrar la cantidad total de automóviles disponibles en cada
+sucursal. */
+use("db_campus_alquiler");
+db.sucursal_automovil.aggregate([
+    {
+        $lookup: {
+          from: "sucursal",
+          localField: "ID_Sucursal_id",
+          foreignField: "_id",
+          as: "Sucursal_Info"
+        }
+    },
+    {
+        $unwind: "$Sucursal_Info"
+     },
+    {
+        $project: {
+          "Sucursal_Info.ID_Sucursal":0,
+          "ID_Automovil_id":0
+        }
+    }
+]);
+
+/* 9. Obtener el costo total de un alquiler específico.*/
+use("db_campus_alquiler");
+db.alquiler.find(
+    {
+        _id: 2
+    },
+    {
+        "Costo_Total":1
+    })
+
+/* 10.Listar los clientes con el DNI específico. */
+use("db_campus_alquiler");
+db.cliente.find(
+    {
+       DNI: "125356895"
+    },
+    )
+
+/* 11.Mostrar todos los automóviles con una capacidad mayor a 5
+personas. */
+use("db_campus_alquiler");
+db.automovil.find(
+    {
+       "Capacidad": {$gt: 5}
+    },
+    )
+
+/* 12.Obtener los detalles del alquiler que tiene fecha de inicio en
+'2023-07-05'. */
+use("db_campus_alquiler");
+db.alquiler.find(
+    {
+       "Fecha_Inicio": "2023-07-15"
+    },
+    )
+
+/* 13.Listar las reservas pendientes realizadas por un cliente
+específico. */
+use("db_campus_alquiler");
+db.reserva.aggregate([
+    {
+        $match: {
+          Estado: "Pendiente",
+          ID_Cliente_id: 1
+        }
+      },
+    {
+        $lookup: {
+          from: "cliente",
+          localField: "ID_Cliente_id",
+          foreignField: "_id",
+          as: "Cliente_Info"
+        }
+    },
+    {
+        $unwind: "$Cliente_Info"
+     },
+     {
+        $lookup: {
+          from: "automovil",
+          localField: "ID_Automovil_id",
+          foreignField: "_id",
+          as: "Automovil_Info"
+        }
+    },
+    {
+        $unwind: "$Automovil_Info"
+     },
+    {
+        $project: {
+          "Cliente_Info.ID_Cliente":0,
+          "Automovil_Info.ID_Automovil": 0
+        }
+    }
+]);
+
+/* 14.Mostrar los empleados con cargo de "Gerente" o "Asistente". */
+use("db_campus_alquiler");
+db.empleado.find(
+    {
+       "Cargo": {$in:["Gerente", "Asistente"]}
+    },
+    )
+
+/* 15.Obtener los datos de los clientes que realizaron al menos un
+alquiler. */
+use("db_campus_alquiler");
+db.alquiler.aggregate([
+    {
+        $lookup: {
+          from: "cliente",
+          localField: "ID_Cliente_id",
+          foreignField: "_id",
+          as: "Cliente_Info"
+        }
+    },
+    {
+        $unwind: "$Cliente_Info"
+     },
+    {
+        $project: {
+            "_id":0,
+        "Cliente_Info":1,
+        }
+    }
+]);
+
+/* 16.Listar todos los automóviles ordenados por marca y modelo. */
+use("db_campus_alquiler");
+db.automovil.find().sort({
+    Marca: 1,
+    Modelo: -1
+  });
+
+/* 17.Mostrar la cantidad total de automóviles en cada sucursal junto
+con su dirección */
+use("db_campus_alquiler");
+db.sucursal.aggregate([
+    {
+      $lookup: {
+        from: "sucursal_automovil",
+        localField: "ID_Sucursal",
+        foreignField: "ID_Sucursal_id",
+        as: "automoviles"
+      }
+    },
+    {
+      $group: {
+        _id: "$_id",
+        Direccion: { $first: "$Direccion" },
+        cantidad_total_automoviles: { $sum: "$automoviles.Cantidad_Disponible" }
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        Direccion: 1,
+        cantidad_total_automoviles: 1
+      }
+    }
+  ]);
