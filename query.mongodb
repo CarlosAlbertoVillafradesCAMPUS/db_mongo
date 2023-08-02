@@ -584,36 +584,26 @@ db.cliente.find({});
 
 //3. Obtener todos los automóviles disponibles para alquiler.
 use("db_campus_alquiler");
-db.alquiler.aggregate([
-  {
-    $match: {
-      Estado: "Inactivo",
-    },
-  },
+db.automovil.aggregate([
   {
     $lookup: {
-      from: "automovil",
-      localField: "ID_Automovil_id",
-      foreignField: "_id",
-      as: "Automovil_Info",
-    },
+      from: "alquiler",
+      localField: "_id",
+      foreignField: "ID_Automovil_id",
+      as: "Alquiler_Info"
+    }
   },
   {
-    $unwind: "$Automovil_Info",
-  },
-  {
-    $group: {
-      _id: "$Automovil_Info._id",
-      Automovil_Info: { $first: "$Automovil_Info" },
-    },
+    $match: {
+      "Alquiler_Info.Estado":"Inactivo"
+    }
   },
   {
     $project: {
-      _id: 0,
-      Automovil_Info: 1,
-    },
-  },
-]);
+      "Alquiler_Info":0
+    }
+  }
+])
 
 //4. Listar todos los alquileres activos junto con los datos de los clientes relacionados.
 use("db_campus_alquiler");
@@ -759,7 +749,7 @@ db.alquiler.find(
 /* 10.Listar los clientes con el DNI específico. */
 use("db_campus_alquiler");
 db.cliente.find({
-  DNI: "125356895",
+  DNI: {$eq: "125356895"},
 });
 
 /* 11.Mostrar todos los automóviles con una capacidad mayor a 5
@@ -773,7 +763,7 @@ db.automovil.find({
 '2023-07-05'. */
 use("db_campus_alquiler");
 db.alquiler.find({
-  Fecha_Inicio: "2023-07-15",
+  Fecha_Inicio: {$eq:"2023-07-15"},
 });
 
 /* 13.Listar las reservas pendientes realizadas por un cliente
@@ -887,41 +877,35 @@ db.alquiler.countDocuments({});
 /*19.Mostrar los automóviles con capacidad igual a 5 personas y que
 estén disponibles.*/
 use("db_campus_alquiler");
-db.alquiler.aggregate([
-  {
-    $match: {
-      Estado: "Inactivo",
-    },
-  },
+db.automovil.aggregate([
   {
     $lookup: {
-      from: "automovil",
-      localField: "ID_Automovil_id",
-      foreignField: "_id",
-      as: "Automovil_Info",
-    },
-  },
-  {
-    $unwind: "$Automovil_Info",
+      from: "alquiler",
+      localField: "_id",
+      foreignField: "ID_Automovil_id",
+      as: "Alquiler_Info"
+    }
   },
   {
     $match: {
-      "Automovil_Info.Capacidad": 4,
-    },
-  },
-  {
-    $group: {
-      _id: "$Automovil_Info._id",
-      Automovil_Info: { $first: "$Automovil_Info" },
-    },
+      "Alquiler_Info.Estado":"Inactivo",
+      "Capacidad":{$gt: 2}
+    }
   },
   {
     $project: {
-      _id: 0,
-      Automovil_Info: 1,
-    },
-  },
-]);
+      "_id": 1,
+      "ID_Automovil": 1,
+      "Marca": 1,
+      "Modelo": 1,
+      "Anio": 1,
+      "Tipo": 1,
+      "Capacidad": 1,
+      "Precio_Diario":1,
+      "Alquiler_Info.Estado":1
+    }
+  }
+])
 
 /*21.Listar los alquileres con fecha de inicio entre '2023-07-05' y
 '2023-07-10'.*/
