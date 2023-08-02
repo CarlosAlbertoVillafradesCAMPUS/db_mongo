@@ -664,6 +664,8 @@ db.reserva.aggregate([
   },
   {
     $project: {
+        "ID_Cliente_id":0,
+        "ID_Automovil_id":0,
       "Cliente_Info.ID_Cliente": 0,
       "Automovil_Info.ID_Automovil": 0,
     },
@@ -910,4 +912,4 @@ db.automovil.aggregate([
 /*21.Listar los alquileres con fecha de inicio entre '2023-07-05' y
 '2023-07-10'.*/
 use("db_campus_alquiler");
-db.alquiler.find({ Fecha_Inicio: { $gte: "2023-07-05", $lte: "2023-09-20" } });
+db.alquiler.find({$and: [{Fecha_Inicio: {$gte:'2023-07-20' }},{Fecha_Inicio: {$lte: "2024-12-10"}}]});
