@@ -1,29 +1,300 @@
 /* Creacion de colecciones*/
+use("db_campus_alquiler")
+db.createCollection("sucursal", {
+  capped: true,
+  size: 690,
+  max: 6,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Sucursal Object Validation",
+          required: [ "ID_Sucursal", "Nombre", "Direccion", "Telefono"],
+          properties: {
+            ID_Sucursal: {
+                bsonType: "int",
+                description: "Error en los parametros de entrada: 'ID_Sucursal'",
+             },
+            Nombre: {
+                bsonType: "string",
+                description: "Error en los parametros de entrada: 'Nombre'",
+                maxLength: 60
+             },
+            Direccion: {
+              bsonType: "string",
+              description: "Error en los parametros de entrada: 'Direccion'",
+              maxLength: 200
+           },
+           Telefono: {
+            bsonType: "string",
+            description: "Error en los parametros de entrada: 'Telefono'",
+            pattern: "^[0-9+]+$",
+            maxLength: 13
+         }
+          }
+       },
+  }
+});
+
+use("db_campus_alquiler")
+db.createCollection("automovil", {
+  capped: true,
+  size: 690,
+  max: 6,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Automovil Object Validation",
+          required: [ "ID_Automovil", "Marca", "Modelo", "Anio", "Tipo", "Capacidad", "Precio_Diario"],
+          properties: {
+            ID_Automovil: {
+                bsonType: "string",
+                maxLength: 8,
+                pattern: "^[A-Z0-9]+$",
+                description: "Error en los parametros de entrada: 'ID_Automovil'"
+             },
+             Marca: {
+                bsonType: "string",
+                maxLength: 60,
+                description: "Error en los parametros de entrada: 'Marca'"
+             },
+             Modelo: {
+              bsonType: "string",
+              maxLength: 200,
+              description: "Error en los parametros de entrada: 'Modelo'"
+           },
+            Anio: {
+              bsonType: "int",
+              minimum:2000,
+              maximum:3000,
+              description: "Error en los parametros de entrada: 'Anio'"
+          },
+            Tipo: {
+              bsonType: "string",
+              maxLength: 60,
+              description: "Error en los parametros de entrada: 'Tipo'"
+          },
+          Capacidad: {
+              bsonType: "int",
+              minimum:1,
+              maximum:30,
+              description: "Error en los parametros de entrada: 'Capacidad'"
+          },
+          Precio_Diario: {
+            bsonType: "int",
+            maxLength: 9,
+            description: "Error en los parametros de entrada: 'Precio_Diario'"
+        }
+          }
+       },
+  }
+});
+
+use("db_campus_alquiler")
+db.createCollection("sucursal_automovil", {
+  capped: true,
+  size: 690,
+  max: 6,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Sucursal_Automovil Object Validation",
+          required: [ "ID_Sucursal_id", "ID_Automovil_id", "Cantidad_Disponible"],
+          properties: {
+            ID_Sucursal_id: {
+              bsonType: "int",
+              description: "Error en los parametros de entrada: 'ID_Sucursal_id'",
+             },
+             ID_Automovil_id: {
+              bsonType: "string",
+              maxLength: 8,
+              pattern: "^[A-Z0-9]+$",
+              description: "Error en los parametros de entrada: 'ID_Automovil_id'"
+             },
+             Cantidad_Disponible: {
+              bsonType: "int",
+              maxLength: 4,
+              description: "Error en los parametros de entrada: 'Cantidad_Disponible'"
+           }
+          }
+       },
+  }
+});
+
+use("db_campus_alquiler")
+db.createCollection("cliente", {
+  capped: true,
+  size: 890,
+  max: 6,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Automovil Object Validation",
+          required: [ "ID_Cliente", "Nombre", "Apellido", "DNI", "Direccion", "Telefono", "Email"],
+          properties: {
+            ID_Cliente: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'ID_Cliente'"
+             },
+             Nombre: {
+                bsonType: "string",
+                maxLength: 30,
+                pattern: "^[a-zA-Z\s]+$",
+                description: "Error en los parametros de entrada: 'Nombre'"
+             },
+             Apellido: {
+                bsonType: "string",
+                maxLength: 30,
+                pattern: "^[a-zA-Z\s]+$",
+                description: "Error en los parametros de entrada: 'Apellido'"
+           },
+              DNI: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'DNI'"
+            },
+            Direccion: {
+                bsonType: "string",
+                maxLength: 200,
+                description: "Error en los parametros de entrada: 'Direccion'",
+            },
+            Telefono: {
+                bsonType: "string",
+                maxLength: 13,
+                pattern: "^[0-9+]+$",
+                description: "Error en los parametros de entrada: 'Telefono'",
+            },
+            Email: {
+              bsonType: "string",
+              maxLength: 100,
+              pattern: "^[a-zA-Z0-9\-#/@._]+$",
+              description: "Error en los parametros de entrada: 'Email'"
+          }
+          }
+       },
+  }
+})
+
+use("db_campus_alquiler")
+db.createCollection("alquiler", {
+  capped: true,
+  size: 890,
+  max: 8,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Alquiler Object Validation",
+          required: [ "ID_Alquiler", "ID_Cliente_id", "ID_Automovil_id", "Fecha_Inicio", "Fecha_Fin", "Costo_Total", "Estado"],
+          properties: {
+            ID_Alquiler: {
+                bsonType: "int",
+                description: "Error en los parametros de entrada: 'ID_Alquiler'"
+             },
+             ID_Cliente_id: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'ID_Cliente_id'"
+             },
+             ID_Automovil_id: {
+                bsonType: "string",
+                maxLength: 8,
+                pattern: "^[A-Z0-9]+$",
+                description: "Error en los parametros de entrada: 'ID_Automovil'"
+           },
+             Fecha_Inicio: {
+                bsonType: "date",
+                description: "Error en los parametros de entrada: 'Fecha_Inicio'"
+            },
+            Fecha_Fin: {
+              bsonType: "date",
+              description: "Error en los parametros de entrada: 'Fecha_Fin'"
+            },
+            Costo_Total: {
+              bsonType: "int",
+              maxLength: 11,
+              description: "Error en los parametros de entrada: 'Costo_Total'"
+            },
+            Estado: {
+                bsonType: "string",
+                maxLength: 30,
+                pattern: "^[a-zA-Z\s]+$",
+                description: "Error en los parametros de entrada: 'Estado'"
+          }
+          }
+       },
+  }
+})
+
+use("db_campus_alquiler")
+db.createCollection("reserva", {
+  capped: true,
+  size: 890,
+  max: 8,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Reserva Object Validation",
+          required: [ "ID_Reserva", "ID_Cliente_id", "ID_Automovil_id", "Fecha_Reserva", "Fecha_Inicio", "Fecha_Fin", "Estado"],
+          properties: {
+            ID_Reserva: {
+                bsonType: "int",
+                description: "Error en los parametros de entrada: 'ID_Alquiler'"
+             },
+             ID_Cliente_id: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'ID_Cliente_id'"
+             },
+             ID_Automovil_id: {
+                bsonType: "string",
+                maxLength: 8,
+                pattern: "^[A-Z0-9]+$",
+                description: "Error en los parametros de entrada: 'ID_Automovil'"
+           },
+              Fecha_Reserva: {
+                bsonType: "date",
+                description: "Error en los parametros de entrada: 'Fecha_Reserva'"
+            },
+             Fecha_Inicio: {
+                bsonType: "date",
+                description: "Error en los parametros de entrada: 'Fecha_Inicio'"
+            },
+            Fecha_Fin: {
+              bsonType: "date",
+              description: "Error en los parametros de entrada: 'Fecha_Fin'"
+            },
+            Estado: {
+                bsonType: "string",
+                maxLength: 30,
+                pattern: "^[a-zA-Z\s]+$",
+                description: "Error en los parametros de entrada: 'Estado'"
+          }
+          }
+       },
+  }
+})
+/* AGREGAR DATOS */
 use("db_campus_alquiler");
 db.sucursal.insertMany([
   {
-    _id: 1,
     ID_Sucursal: 1,
     Nombre: "Bucaramanga",
     Direccion: "calla 11 cr.32",
-    Telefono: "3224757534",
+    Telefono: "3588654216",
   },
   {
-    _id: 2,
     ID_Sucursal: 2,
     Nombre: "Medellin",
     Direccion: "calla 11 cr.32",
     Telefono: "3588654216",
   },
   {
-    _id: 3,
     ID_Sucursal: 3,
     Nombre: "Bogota",
     Direccion: "calla 11 cr.32",
     Telefono: "3215489586",
   },
   {
-    _id: 4,
     ID_Sucursal: 4,
     Nombre: "Barranca",
     Direccion: "calla 11 cr.32",
@@ -34,50 +305,45 @@ db.sucursal.insertMany([
 use("db_campus_alquiler");
 db.automovil.insertMany([
   {
-    _id: 1,
-    ID_Automovil: 1,
-    Marca: "Chevrolet Camaro",
-    Modelo: 2022,
+    ID_Automovil: "CAR78",
+    Marca: "Chevrolet",
+    Modelo: "Camaro",
     Anio: 2020,
     Tipo: "Automovil",
     Capacidad: 2,
-    Precio_Diario: 140000000,
+    Precio_Diario: 1400000,
   },
   {
-    _id: 2,
-    ID_Automovil: 2,
-    Marca: "Toyota Prado",
-    Modelo: 2022,
+    ID_Automovil: "VIL74",
+    Marca: "Toyota",
+    Modelo: "Prado",
     Anio: 2020,
     Tipo: "Camioneta",
     Capacidad: 4,
-    Precio_Diario: 200000000,
+    Precio_Diario: 2000000,
   },
   {
-    _id: 3,
-    ID_Automovil: 3,
-    Marca: "Ford Fiesta",
-    Modelo: 2022,
+    ID_Automovil: "PIN41",
+    Marca: "Ford",
+    Modelo: "Fiesta",
     Anio: 2020,
     Tipo: "Automovil",
     Capacidad: 4,
-    Precio_Diario: 60000000,
+    Precio_Diario: 600000,
   },
   {
-    _id: 4,
-    ID_Automovil: 4,
-    Marca: "Ford Raptor",
-    Modelo: 2022,
+    ID_Automovil: "PER89",
+    Marca: "Ford",
+    Modelo: "Raptor",
     Anio: 2020,
     Tipo: "Camioneta",
     Capacidad: 4,
-    Precio_Diario: 260000000,
+    Precio_Diario: 2600000,
   },
   {
-    _id: 5,
-    ID_Automovil: 5,
-    Marca: "Chevrolet Camaro",
-    Modelo: 2000,
+    ID_Automovil: "LLO69",
+    Marca: "Chevrolet",
+    Modelo: "Camaro",
     Anio: 2020,
     Tipo: "Automovil",
     Capacidad: 2,
@@ -88,33 +354,28 @@ db.automovil.insertMany([
 use("db_campus_alquiler");
 db.sucursal_automovil.insertMany([
   {
-    _id: 1,
     ID_Sucursal_id: 1,
-    ID_Automovil_id: 1,
+    ID_Automovil_id: "CAR78",
     Cantidad_Disponible: 5,
   },
   {
-    _id: 2,
     ID_Sucursal_id: 2,
-    ID_Automovil_id: 2,
+    ID_Automovil_id: "VIL74",
     Cantidad_Disponible: 9,
   },
   {
-    _id: 3,
     ID_Sucursal_id: 3,
-    ID_Automovil_id: 3,
+    ID_Automovil_id: "PIN41",
     Cantidad_Disponible: 15,
   },
   {
-    _id: 4,
     ID_Sucursal_id: 3,
-    ID_Automovil_id: 4,
+    ID_Automovil_id: "PER89",
     Cantidad_Disponible: 20,
   },
   {
-    _id: 5,
     ID_Sucursal_id: 1,
-    ID_Automovil_id: 2,
+    ID_Automovil_id: "LLO69",
     Cantidad_Disponible: 15,
   },
 ]);
@@ -122,117 +383,106 @@ db.sucursal_automovil.insertMany([
 use("db_campus_alquiler");
 db.cliente.insertMany([
   {
-    _id: 1,
     ID_Cliente: 1,
     Nombre: "Carlos",
     Apellido: "Villafrades",
-    DNI: "125356895",
+    DNI: 125356895,
     Direccion: "Calle 11",
     Telefono: "3235866595",
     Email: "cavillafrades@gmail.com",
   },
   {
-    _id: 2,
     ID_Cliente: 2,
     Nombre: "Camilo",
     Apellido: "Sanchez",
-    DNI: "63359687",
+    DNI: 63359687,
     Direccion: "Calle 13",
     Telefono: "325854596",
     Email: "camilo@gmail.com",
   },
   {
-    _id: 3,
     ID_Cliente: 3,
     Nombre: "Jose",
     Apellido: "Villafrades",
-    DNI: "17845796",
+    DNI: 17845796,
     Direccion: "Calle 15",
     Telefono: "3185487154",
     Email: "jose@gmail.com",
   },
   {
-    _id: 4,
     ID_Cliente: 4,
     Nombre: "Felipe",
     Apellido: "Torres",
-    DNI: "68854752",
+    DNI: 68854752,
     Direccion: "Calle 17",
     Telefono: "3112584875",
     Email: "felipe@gmail.com",
   },
   {
-    _id: 5,
     ID_Cliente: 5,
     Nombre: "Javier",
-    Apellido: "Marañes",
-    DNI: "68854752",
-    Direccion: "Calle 17",
-    Telefono: "3112584875",
-    Email: "felipe@gmail.com",
+    Apellido: "Maraes",
+    DNI: 87457625,
+    Direccion: "Calle 200",
+    Telefono: "3225478457",
+    Email: "javier@gmail.com",
   },
 ]);
 
 use("db_campus_alquiler");
 db.alquiler.insertMany([
   {
-    _id: 1,
     ID_Alquiler: 1,
     ID_Cliente_id: 1,
-    ID_Automovil_id: 1,
-    Fecha_Inicio: "2023-07-15",
-    Fecha_Fin: "2023-07-20",
-    Costo_Total: 250.5,
+    ID_Automovil_id: "CAR78",
+    Fecha_Inicio: new Date("2023-07-15"),
+    Fecha_Fin: new Date("2023-07-20"),
+    Costo_Total: 250005,
     Estado: "Activo",
   },
   {
-    _id: 2,
     ID_Alquiler: 2,
     ID_Cliente_id: 2,
-    ID_Automovil_id: 2,
-    Fecha_Inicio: "2023-08-05",
-    Fecha_Fin: "2023-08-12",
-    Costo_Total: 200.5,
+    ID_Automovil_id: "VIL74",
+    Fecha_Inicio: new Date("2023-08-05"),
+    Fecha_Fin: new Date("2023-08-12"),
+    Costo_Total: 20052225,
     Estado: "Activo",
   },
   {
-    _id: 3,
     ID_Alquiler: 3,
     ID_Cliente_id: 3,
-    ID_Automovil_id: 3,
-    Fecha_Inicio: "2023-09-15",
-    Fecha_Fin: "2023-09-20",
-    Costo_Total: 300.5,
+    ID_Automovil_id: "PIN41",
+    Fecha_Inicio: new Date("2023-09-15"),
+    Fecha_Fin: new Date("2023-09-20"),
+    Costo_Total: 255411,
     Estado: "Inactivo",
   },
   {
-    _id: 4,
     ID_Alquiler: 4,
     ID_Cliente_id: 4,
-    ID_Automovil_id: 4,
-    Fecha_Inicio: "2023-12-20",
-    Fecha_Fin: "2023-12-31",
-    Costo_Total: 500.5,
+    ID_Automovil_id: "PER89",
+    Fecha_Inicio: new Date("2023-12-20"),
+    Fecha_Fin: new Date("2023-12-31"),
+    Costo_Total: 50026658,
     Estado: "Inactivo",
   },
   {
-    _id: 5,
     ID_Alquiler: 5,
     ID_Cliente_id: 1,
-    ID_Automovil_id: 1,
-    Fecha_Inicio: "2023-08-15",
-    Fecha_Fin: "2023-08-20",
-    Costo_Total: 250.5,
+    ID_Automovil_id: "LLO69",
+    Fecha_Inicio: new Date("2023-08-15"),
+    Fecha_Fin: new Date("2023-08-20"),
+    Costo_Total: 2505555,
     Estado: "Inactivo",
   },
   {
-    _id: 6,
     ID_Alquiler: 6,
     ID_Cliente_id: 2,
-    ID_Automovil_id: 1,
-    Fecha_Inicio: "2023-09-15",
-    Fecha_Fin: "2023-09-20",
-    Costo_Total: 250.5,
+    ID_Automovil_id: "CAR78",
+    Fecha_Inicio: new Date("2023-09-15"),
+    Fecha_Fin: new Date("2023-09-20"),
+    Costo_Total: 25002585,
     Estado: "Inactivo",
   },
 ]);
@@ -240,43 +490,39 @@ db.alquiler.insertMany([
 use("db_campus_alquiler");
 db.reserva.insertMany([
   {
-    _id: 1,
     ID_Reserva: 1,
     ID_Cliente_id: 1,
-    ID_Automovil_id: 1,
-    Fecha_Reserva: "2023-07-15",
-    Fecha_Inicio: "2024-01-15",
-    Fecha_Fin: "2024-01-20",
+    ID_Automovil_id: "CAR78",
+    Fecha_Reserva: new Date("2023-07-15"),
+    Fecha_Inicio: new Date("2024-01-15"),
+    Fecha_Fin: new Date("2024-01-20"),
     Estado: "Pendiente",
   },
   {
-    _id: 2,
     ID_Reserva: 2,
     ID_Cliente_id: 2,
-    ID_Automovil_id: 2,
-    Fecha_Reserva: "2023-09-15",
-    Fecha_Inicio: "2024-02-15",
-    Fecha_Fin: "2024-02-20",
+    ID_Automovil_id: "VIL74",
+    Fecha_Reserva: new Date("2023-09-15"),
+    Fecha_Inicio: new Date("2024-02-15"),
+    Fecha_Fin: new Date("2024-02-20"),
     Estado: "Pendiente",
   },
   {
-    _id: 3,
     ID_Reserva: 3,
     ID_Cliente_id: 3,
-    ID_Automovil_id: 3,
-    Fecha_Reserva: "2023-11-15",
-    Fecha_Inicio: "2024-02-15",
-    Fecha_Fin: "2024-02-20",
+    ID_Automovil_id: "PIN41",
+    Fecha_Reserva: new Date("2023-11-15"),
+    Fecha_Inicio: new Date("2024-02-15"),
+    Fecha_Fin: new Date("2024-02-20"),
     Estado: "Confirmado",
   },
   {
-    _id: 4,
     ID_Reserva: 4,
     ID_Cliente_id: 4,
-    ID_Automovil_id: 4,
-    Fecha_Reserva: "2023-12-15",
-    Fecha_Inicio: "2023-03-15",
-    Fecha_Fin: "2023-03-20",
+    ID_Automovil_id: "PER89",
+    Fecha_Reserva: new Date("2023-12-15"),
+    Fecha_Inicio: new Date("2023-03-15"),
+    Fecha_Fin: new Date("2023-03-20"),
     Estado: "Confirmado",
   },
 ]);
