@@ -273,6 +273,153 @@ db.createCollection("reserva", {
        },
   }
 })
+
+use("db_campus_alquiler")
+db.createCollection("empleado", {
+  capped: true,
+  size: 890,
+  max: 6,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Empleado Object Validation",
+          required: [ "ID_Empleado", "Nombre", "Apellido", "DNI", "Direccion", "Telefono", "Cargo"],
+          properties: {
+            ID_Empleado: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'ID_Empleado'"
+             },
+             Nombre: {
+                bsonType: "string",
+                maxLength: 30,
+                pattern: "^[a-zA-Z\s]+$",
+                description: "Error en los parametros de entrada: 'Nombre'"
+             },
+             Apellido: {
+                bsonType: "string",
+                maxLength: 30,
+                pattern: "^[a-zA-Z\s]+$",
+                description: "Error en los parametros de entrada: 'Apellido'"
+           },
+              DNI: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'DNI'"
+            },
+            Direccion: {
+                bsonType: "string",
+                maxLength: 200,
+                description: "Error en los parametros de entrada: 'Direccion'",
+            },
+            Telefono: {
+                bsonType: "string",
+                maxLength: 13,
+                pattern: "^[0-9+]+$",
+                description: "Error en los parametros de entrada: 'Telefono'",
+            },
+            Cargo: {
+              bsonType: "string",
+              maxLength: 60,
+              pattern: "^[a-zA-Z\s]+$",
+              description: "Error en los parametros de entrada: 'Cargo'"
+          }
+          }
+       },
+  }
+})
+
+use("db_campus_alquiler")
+db.createCollection("registro_entrega", {
+  capped: true,
+  size: 890,
+  max: 8,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Reserva Object Validation",
+          required: [ "ID_Registro", "ID_Alquiler_id", "ID_Empleado_id", "Fecha_Entrega", "Combustible_Entregado", "Kilometraje_Entregado"],
+          properties: {
+            ID_Registro: {
+                bsonType: "int",
+                description: "Error en los parametros de entrada: 'ID_Registro'"
+             },
+             ID_Alquiler_id: {
+                bsonType: "int",
+                description: "Error en los parametros de entrada: 'ID_Alquiler_id'"
+             },
+             ID_Empleado_id: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'ID_Empleado'"
+           },
+           Fecha_Entrega: {
+                bsonType: "date",
+                description: "Error en los parametros de entrada: 'Fecha_Entrega'"
+            },
+            Combustible_Entregado: {
+                bsonType: "number",
+                maxLength: 4,
+                description: "Error en los parametros de entrada: 'Combustible_Entregado'"
+            },
+            Kilometraje_Entregado: {
+              bsonType: "int",
+              maxLength: 6,
+              description: "Error en los parametros de entrada: 'Kilometraje_Entregado'"
+            }
+          }
+       },
+  }
+})
+
+use("db_campus_alquiler")
+db.createCollection("registro_devolucion", {
+  capped: true,
+  size: 890,
+  max: 8,
+  validator:{
+      $jsonSchema: {
+          bsonType: "object",
+          title: "Reserva Object Validation",
+          required: [ "ID_Registro", "ID_Alquiler_id", "ID_Empleado_id", "Fecha_Devolucion", "Combustible_Devuelto", "Kilometraje_Devuelto", "Monto_Adicional"],
+          properties: {
+            ID_Registro: {
+                bsonType: "int",
+                description: "Error en los parametros de entrada: 'ID_Registro'"
+             },
+             ID_Alquiler_id: {
+                bsonType: "int",
+                description: "Error en los parametros de entrada: 'ID_Alquiler_id'"
+             },
+             ID_Empleado_id: {
+                bsonType: "int",
+                maxLength: 10,
+                description: "Error en los parametros de entrada: 'ID_Empleado'"
+           },
+           Fecha_Devolucion: {
+                bsonType: "date",
+                description: "Error en los parametros de entrada: 'Fecha_Devolucion'"
+            },
+            Combustible_Devuelto: {
+                bsonType: "number",
+                maxLength: 4,
+                description: "Error en los parametros de entrada: 'Combustible_Devuelto'"
+            },
+            Kilometraje_Devuelto: {
+              bsonType: "int",
+              maxLength: 6,
+              description: "Error en los parametros de entrada: 'Kilometraje_Devuelto'"
+            },
+            Monto_Adicional:{
+              bsonType: "int",
+              maxLength: 10,
+              description:"Error en los parametros de entrada: 'Monto_Adicional'"
+            }
+          }
+       },
+  }
+})
+
 /* AGREGAR DATOS */
 use("db_campus_alquiler");
 db.sucursal.insertMany([
@@ -530,41 +677,37 @@ db.reserva.insertMany([
 use("db_campus_alquiler");
 db.empleado.insertMany([
   {
-    _id: 1,
     ID_Empleado: 1,
     Nombre: "Carlos",
     Apellido: "Villafrades",
-    DNI: "64578215",
+    DNI: 64578215,
     Direccion: "Calle 11",
     Telefono: "3225869547",
     Cargo: "Vendedor",
   },
   {
-    _id: 2,
     ID_Empleado: 2,
     Nombre: "Jhoan",
     Apellido: "Santamaria",
-    DNI: "54879571",
+    DNI: 54879571,
     Direccion: "Calle 11",
     Telefono: "3152568475",
     Cargo: "Gerente",
   },
   {
-    _id: 3,
     ID_Empleado: 3,
     Nombre: "Pedro",
     Apellido: "Gonzalez",
-    DNI: "1099586475",
+    DNI: 10995864,
     Direccion: "Calle 12",
     Telefono: "3285268475",
     Cargo: "Vendedor",
   },
   {
-    _id: 4,
     ID_Empleado: 4,
     Nombre: "Jesus",
     Apellido: "Duarte",
-    DNI: "10045421685",
+    DNI: 100454216,
     Direccion: "Calle 11",
     Telefono: "3112589516",
     Cargo: "Asistente",
@@ -574,38 +717,34 @@ db.empleado.insertMany([
 use("db_campus_alquiler");
 db.registro_entrega.insertMany([
   {
-    _id: 1,
     ID_Registro: 1,
     ID_Alquiler_id: 1,
     ID_Empleado_id: 1,
-    Fecha_Entrega: "2023-12-15",
+    Fecha_Entrega: new Date("2023-12-15"),
     Combustible_Entregado: 5.2,
     Kilometraje_Entregado: 10000,
   },
   {
-    _id: 2,
     ID_Registro: 2,
     ID_Alquiler_id: 2,
     ID_Empleado_id: 2,
-    Fecha_Entrega: "2023-10-15",
+    Fecha_Entrega: new Date("2023-10-15"),
     Combustible_Entregado: 7.5,
     Kilometraje_Entregado: 12000,
   },
   {
-    _id: 3,
     ID_Registro: 3,
     ID_Alquiler_id: 3,
     ID_Empleado_id: 3,
-    Fecha_Entrega: "2023-11-15",
+    Fecha_Entrega: new Date("2023-11-15"),
     Combustible_Entregado: 5.2,
     Kilometraje_Entregado: 15000,
   },
   {
-    _id: 4,
     ID_Registro: 4,
     ID_Alquiler_id: 4,
     ID_Empleado_id: 4,
-    Fecha_Entrega: "2023-10-15",
+    Fecha_Entrega: new Date("2023-10-15"),
     Combustible_Entregado: 6.2,
     Kilometraje_Entregado: 20000,
   },
@@ -614,217 +753,213 @@ db.registro_entrega.insertMany([
 use("db_campus_alquiler");
 db.registro_devolucion.insertMany([
   {
-    _id: 1,
     ID_Registro: 1,
     ID_Alquiler_id: 1,
     ID_Empleado_id: 1,
-    Fecha_Devolucion: "2024-01-15",
+    Fecha_Devolucion: new Date("2024-01-15"),
     Combustible_Devuelto: 5.2,
     Kilometraje_Devuelto: 20000,
     Monto_Adicional: 20000,
   },
   {
-    _id: 2,
     ID_Registro: 2,
     ID_Alquiler_id: 2,
     ID_Empleado_id: 2,
-    Fecha_Devolucion: "2024-02-15",
+    Fecha_Devolucion: new Date("2024-02-15"),
     Combustible_Devuelto: 5.0,
     Kilometraje_Devuelto: 22000,
     Monto_Adicional: 30000,
   },
   {
-    _id: 3,
     ID_Registro: 3,
     ID_Alquiler_id: 3,
     ID_Empleado_id: 3,
-    Fecha_Devolucion: "2024-05-15",
+    Fecha_Devolucion: new Date("2024-05-15"),
     Combustible_Devuelto: 6.0,
     Kilometraje_Devuelto: 26000,
     Monto_Adicional: 10000,
   },
   {
-    _id: 4,
     ID_Registro: 4,
     ID_Alquiler_id: 4,
     ID_Empleado_id: 4,
-    Fecha_Devolucion: "2024-03-15",
+    Fecha_Devolucion: new Date("2024-03-15"),
     Combustible_Devuelto: 5.0,
     Kilometraje_Devuelto: 30000,
     Monto_Adicional: 15000,
   },
 ]);
 
-/* Consultas con las Relaciones */
+// /* Consultas con las Relaciones */
 
-/* Sucursal_Automovil */
-use("db_campus_alquiler");
-db.sucursal_automovil.aggregate([
-  {
-    $lookup: {
-      from: "sucursal",
-      localField: "ID_Sucursal_id",
-      foreignField: "_id",
-      as: "Sucursal_Info",
-    },
-  },
-  {
-    $unwind: "$Sucursal_Info",
-  },
-  {
-    $lookup: {
-      from: "automovil",
-      localField: "ID_Automovil_id",
-      foreignField: "_id",
-      as: "Automovil_Info",
-    },
-  },
-  {
-    $unwind: "$Automovil_Info",
-  },
-  {
-    $project: {
-      "Sucursal_Info.ID_Sucursal": 0,
-      "Automovil_Info.ID_Automovil": 0,
-    },
-  },
-]);
+// /* Sucursal_Automovil */
+// use("db_campus_alquiler");
+// db.sucursal_automovil.aggregate([
+//   {
+//     $lookup: {
+//       from: "sucursal",
+//       localField: "ID_Sucursal_id",
+//       foreignField: "_id",
+//       as: "Sucursal_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Sucursal_Info",
+//   },
+//   {
+//     $lookup: {
+//       from: "automovil",
+//       localField: "ID_Automovil_id",
+//       foreignField: "_id",
+//       as: "Automovil_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Automovil_Info",
+//   },
+//   {
+//     $project: {
+//       "Sucursal_Info.ID_Sucursal": 0,
+//       "Automovil_Info.ID_Automovil": 0,
+//     },
+//   },
+// ]);
 
-/* Reserva */
-use("db_campus_alquiler");
-db.reserva.aggregate([
-  {
-    $lookup: {
-      from: "cliente",
-      localField: "ID_Cliente_id",
-      foreignField: "_id",
-      as: "Cliente_Info",
-    },
-  },
-  {
-    $unwind: "$Cliente_Info",
-  },
-  {
-    $lookup: {
-      from: "automovil",
-      localField: "ID_Automovil_id",
-      foreignField: "_id",
-      as: "Automovil_Info",
-    },
-  },
-  {
-    $unwind: "$Automovil_Info",
-  },
-  {
-    $project: {
-      "Cliente_Info.ID_Cliente": 0,
-      "Automovil_Info.ID_Automovil": 0,
-    },
-  },
-]);
+// /* Reserva */
+// use("db_campus_alquiler");
+// db.reserva.aggregate([
+//   {
+//     $lookup: {
+//       from: "cliente",
+//       localField: "ID_Cliente_id",
+//       foreignField: "_id",
+//       as: "Cliente_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Cliente_Info",
+//   },
+//   {
+//     $lookup: {
+//       from: "automovil",
+//       localField: "ID_Automovil_id",
+//       foreignField: "_id",
+//       as: "Automovil_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Automovil_Info",
+//   },
+//   {
+//     $project: {
+//       "Cliente_Info.ID_Cliente": 0,
+//       "Automovil_Info.ID_Automovil": 0,
+//     },
+//   },
+// ]);
 
-/* Alquiler */
-use("db_campus_alquiler");
-db.alquiler.aggregate([
-  {
-    $lookup: {
-      from: "cliente",
-      localField: "ID_Cliente_id",
-      foreignField: "_id",
-      as: "Cliente_Info",
-    },
-  },
-  {
-    $unwind: "$Cliente_Info",
-  },
-  {
-    $lookup: {
-      from: "automovil",
-      localField: "ID_Automovil_id",
-      foreignField: "_id",
-      as: "Automovil_Info",
-    },
-  },
-  {
-    $unwind: "$Automovil_Info",
-  },
-  {
-    $project: {
-      "Cliente_Info.ID_Cliente": 0,
-      "Automovil_Info.ID_Automovil": 0,
-    },
-  },
-]);
+// /* Alquiler */
+// use("db_campus_alquiler");
+// db.alquiler.aggregate([
+//   {
+//     $lookup: {
+//       from: "cliente",
+//       localField: "ID_Cliente_id",
+//       foreignField: "_id",
+//       as: "Cliente_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Cliente_Info",
+//   },
+//   {
+//     $lookup: {
+//       from: "automovil",
+//       localField: "ID_Automovil_id",
+//       foreignField: "_id",
+//       as: "Automovil_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Automovil_Info",
+//   },
+//   {
+//     $project: {
+//       "Cliente_Info.ID_Cliente": 0,
+//       "Automovil_Info.ID_Automovil": 0,
+//     },
+//   },
+// ]);
 
-/* Registro Devolucion */
-use("db_campus_alquiler");
-db.registro_devolucion.aggregate([
-  {
-    $lookup: {
-      from: "alquiler",
-      localField: "ID_Alquiler_id",
-      foreignField: "_id",
-      as: "Alquiler_Info",
-    },
-  },
-  {
-    $unwind: "$Alquiler_Info",
-  },
-  {
-    $lookup: {
-      from: "empleado",
-      localField: "ID_Empleado_id",
-      foreignField: "_id",
-      as: "Empleado_Info",
-    },
-  },
-  {
-    $unwind: "$Empleado_Info",
-  },
-  {
-    $project: {
-      "Alquiler_Info.ID_Alquiler": 0,
-      "Empleado_Info.ID_Empleado": 0,
-    },
-  },
-]);
+// /* Registro Devolucion */
+// use("db_campus_alquiler");
+// db.registro_devolucion.aggregate([
+//   {
+//     $lookup: {
+//       from: "alquiler",
+//       localField: "ID_Alquiler_id",
+//       foreignField: "_id",
+//       as: "Alquiler_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Alquiler_Info",
+//   },
+//   {
+//     $lookup: {
+//       from: "empleado",
+//       localField: "ID_Empleado_id",
+//       foreignField: "_id",
+//       as: "Empleado_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Empleado_Info",
+//   },
+//   {
+//     $project: {
+//       "Alquiler_Info.ID_Alquiler": 0,
+//       "Empleado_Info.ID_Empleado": 0,
+//     },
+//   },
+// ]);
 
-/* Registro Entrega */
-use("db_campus_alquiler");
-db.registro_entrega.aggregate([
-  {
-    $lookup: {
-      from: "alquiler",
-      localField: "ID_Alquiler_id",
-      foreignField: "_id",
-      as: "Alquiler_Info",
-    },
-  },
-  {
-    $unwind: "$Alquiler_Info",
-  },
-  {
-    $lookup: {
-      from: "empleado",
-      localField: "ID_Empleado_id",
-      foreignField: "_id",
-      as: "Empleado_Info",
-    },
-  },
-  {
-    $unwind: "$Empleado_Info",
-  },
-  {
-    $project: {
-      "Alquiler_Info.ID_Alquiler": 0,
-      "Empleado_Info.ID_Empleado": 0,
-    },
-  },
-]);
+// /* Registro Entrega */
+// use("db_campus_alquiler");
+// db.registro_entrega.aggregate([
+//   {
+//     $lookup: {
+//       from: "alquiler",
+//       localField: "ID_Alquiler_id",
+//       foreignField: "_id",
+//       as: "Alquiler_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Alquiler_Info",
+//   },
+//   {
+//     $lookup: {
+//       from: "empleado",
+//       localField: "ID_Empleado_id",
+//       foreignField: "_id",
+//       as: "Empleado_Info",
+//     },
+//   },
+//   {
+//     $unwind: "$Empleado_Info",
+//   },
+//   {
+//     $project: {
+//       "Alquiler_Info.ID_Alquiler": 0,
+//       "Empleado_Info.ID_Empleado": 0,
+//     },
+//   },
+// ]);
 
 /* CONSULTAS */
 
-// Mostrar todos los clientes registrados en la base de datos
+// 2.Mostrar todos los clientes registrados en la base de datos
 use("db_campus_alquiler");
 db.cliente.find({});
 
@@ -834,7 +969,7 @@ db.automovil.aggregate([
   {
     $lookup: {
       from: "alquiler",
-      localField: "_id",
+      localField: "ID_Automovil",
       foreignField: "ID_Automovil_id",
       as: "Alquiler_Info"
     }
@@ -890,7 +1025,7 @@ db.reserva.aggregate([
     $lookup: {
       from: "cliente",
       localField: "ID_Cliente_id",
-      foreignField: "_id",
+      foreignField: "ID_Cliente",
       as: "Cliente_Info",
     },
   },
@@ -901,7 +1036,7 @@ db.reserva.aggregate([
     $lookup: {
       from: "automovil",
       localField: "ID_Automovil_id",
-      foreignField: "_id",
+      foreignField: "ID_Automovil",
       as: "Automovil_Info",
     },
   },
