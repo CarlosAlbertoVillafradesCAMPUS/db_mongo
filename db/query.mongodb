@@ -961,7 +961,7 @@ db.registro_devolucion.insertMany([
 
 // 2.Mostrar todos los clientes registrados en la base de datos
 use("db_campus_alquiler");
-db.cliente.find({});
+db.cliente.find({}, {_id:0});
 
 //3. Obtener todos los automóviles disponibles para alquiler.
 use("db_campus_alquiler");
@@ -998,7 +998,7 @@ db.alquiler.aggregate([
     $lookup: {
       from: "cliente",
       localField: "ID_Cliente_id",
-      foreignField: "_id",
+      foreignField: "ID_Cliente",
       as: "Cliente_Info",
     },
   },
@@ -1058,14 +1058,14 @@ use("db_campus_alquiler");
 db.alquiler.aggregate([
   {
     $match: {
-      _id: 2,
+      ID_Alquiler: 2,
     },
   },
   {
     $lookup: {
       from: "cliente",
       localField: "ID_Cliente_id",
-      foreignField: "_id",
+      foreignField: "ID_Cliente",
       as: "Cliente_Info",
     },
   },
@@ -1076,7 +1076,7 @@ db.alquiler.aggregate([
     $lookup: {
       from: "automovil",
       localField: "ID_Automovil_id",
-      foreignField: "_id",
+      foreignField: "ID_Automovil",
       as: "Automovil_Info",
     },
   },
