@@ -50,7 +50,10 @@ db.createCollection("automovil", {
                 bsonType: "string",
                 maxLength: 8,
                 pattern: "^[A-Z0-9]+$",
-                description: "Error en los parametros de entrada: 'ID_Automovil'"
+                description:{
+                  status: 402,
+                  message: "Error en los parametros de entrada: 'ID_Automovil'"
+                } 
              },
              Marca: {
                 bsonType: "string",

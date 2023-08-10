@@ -57,6 +57,7 @@ storageReserva.get("/", async(req,res)=>{
 // reservas pendientes realizadas por un cliente
 storageReserva.get("/pendiente", async(req,res)=>{
   try {
+    console.log(req.query);
     let {id_cliente} = req.query;
         id_cliente = parseInt(id_cliente)
       const collection = db.collection("reserva");
