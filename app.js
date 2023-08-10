@@ -7,7 +7,6 @@ import storageReserva from "./routers/reservas.js";
 import storageEmpleado from "./routers/empleados.js";
 import storageSucursal from "./routers/sucursal.js";
 
-
 dotenv.config();
 const appExpress = express();
 

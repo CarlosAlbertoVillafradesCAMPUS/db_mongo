@@ -15,6 +15,19 @@ storageEmpleado.get("/", async(req,res)=>{
     } catch (error) {
         res.send(error)
     }
-})
+});
+
+//empleados con cargo de "Gerente" o "Asistente"
+storageEmpleado.get("/cargoEspecial", async(req,res)=>{
+    try {
+        const collection = db.collection("empleado");
+        const data = await collection.find({
+            Cargo: { $in: ["Gerente", "Asistente"] },
+          }).toArray();
+        res.send(data);
+    } catch (error) {
+        res.send(error)
+    }
+});
 
 export default storageEmpleado;
