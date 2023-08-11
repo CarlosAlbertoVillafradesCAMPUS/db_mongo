@@ -46,12 +46,19 @@ storageAutomovil.get("/", async (req,res)=>{
 })
 
 // todos los automóviles con una capacidad mayor a 5 personas
-storageAutomovil.get("/capacidadMayor/", async (req,res)=>{
+storageAutomovil.get("/capacidadMayor", async (req,res)=>{
   try {
       const collection = db.collection("automovil");
-      const data = await collection.find({
-        Capacidad: { $gt: 5 },
-      }).toArray();
+      const data = await collection.aggregate([{
+        $match:{
+          Capacidad: { $gt: 2}
+        }
+      },
+    {
+      $project:{
+        _id:0
+      }
+    }]).toArray();
 
       res.send(data);
   } catch (error) {
@@ -66,7 +73,7 @@ storageAutomovil.get("/capacidadMayor/", async (req,res)=>{
 })
 
 //automóviles ordenados por marca y modelo
-storageAutomovil.get("/ordenados/", async (req,res)=>{
+storageAutomovil.get("/ordenados", async (req,res)=>{
   try {
       const collection = db.collection("automovil");
       const data = await collection.find().sort({
@@ -86,36 +93,17 @@ storageAutomovil.get("/ordenados/", async (req,res)=>{
 })
 
 //cantidad total de automóviles en cada sucursal junto con su dirección
-storageAutomovil.get("/sucursal/", async (req,res)=>{
+storageAutomovil.get("/sucursal", async (req,res)=>{
   try {
       const collection = db.collection("sucursal_automovil");
       const data = await collection.aggregate([
         {
-          $group: {
-            ID_Sucursal_id: "$ID_Sucursal_id",
-            Cantidad_Total_Automoviles: { $sum: "$Cantidad_Disponible" },
-          },
-        },
-        {
-          $lookup: {
-            from: "sucursal",
-            localField: "ID_Sucursal_id",
-            foreignField: "ID_Sucursal",
-            as: "Sucursal_Info",
-          },
-        },
-        {
-          $unwind: "$Sucursal_Info",
-        },
-        {
-          $project: {
-            _id: 0,
-            Sucursal: "$Sucursal_Info.Nombre",
-            Direccion: "$Sucursal_Info.Direccion",
-            Cantidad_Total_Automoviles: 1,
-          },
-        },
-      ]).toArray();
+            $group: {
+                "ID_Sucursal": "$ID_Sucursal",
+                "Cantidad_Total_Disponible": { $sum: "$Cantidad_Disponible" }
+            }
+        }
+    ]).toArray();
       res.send(data);
   } catch (error) {
       res.send(error)
@@ -129,7 +117,7 @@ storageAutomovil.get("/sucursal/", async (req,res)=>{
 })
 
 // automóviles con capacidad igual a 5 personas y que estén disponibles
-storageAutomovil.get("/disponibles/", async (req,res)=>{
+storageAutomovil.get("/disponibles", async (req,res)=>{
   try {
     let {capacidad} = req.query;
     capacidad = parseInt(capacidad);
@@ -146,12 +134,12 @@ storageAutomovil.get("/disponibles/", async (req,res)=>{
         {
           $match: {
             "Alquiler_Info.Estado":"Inactivo",
-            "Capacidad":{$gt: capacidad}
+            "Capacidad": capacidad
           }
         },
         {
           $project: {
-            "_id": 1,
+            _id:0,
             "ID_Automovil": 1,
             "Marca": 1,
             "Modelo": 1,

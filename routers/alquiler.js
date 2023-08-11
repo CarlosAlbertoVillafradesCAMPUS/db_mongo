@@ -40,7 +40,7 @@ storageAlquiler.get("/", async (req, res) => {
 });
 
 // detalles del alquiler con el ID_Alquiler
-storageAlquiler.get("/", async (req, res) => {
+storageAlquiler.get("/detalles", async (req, res) => {
   try {
     let { id } = req.query;
     id = parseInt(id);
@@ -49,7 +49,7 @@ storageAlquiler.get("/", async (req, res) => {
       .aggregate([
         {
           $match: {
-            ID_Alquiler: id,
+            ID_Alquiler: 1,
           },
         },
         {

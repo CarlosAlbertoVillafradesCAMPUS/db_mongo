@@ -60,42 +60,29 @@ storageReserva.get("/pendiente", async(req,res)=>{
     console.log(req.query);
     let {id_cliente} = req.query;
         id_cliente = parseInt(id_cliente)
-      const collection = db.collection("reserva");
+      const collection = db.collection("cliente");
       const data = await collection.aggregate([
         {
+          $lookup: {
+            from: "reserva",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente_id",
+            as: "Reservas_Info",
+          },
+        },
+        {
           $match: {
-            Estado: "Pendiente",
-            ID_Cliente_id: id_cliente,
+            "Reservas_Info.Estado": "Pendiente",
+            "Reservas_Info.ID_Cliente_id": id_cliente,
           },
         },
         {
-          $lookup: {
-            from: "cliente",
-            localField: "ID_Cliente_id",
-            foreignField: "ID_Cliente",
-            as: "Cliente_Info",
-          },
-        },
-        {
-          $unwind: "$Cliente_Info",
-        },
-        {
-          $lookup: {
-            from: "automovil",
-            localField: "ID_Automovil_id",
-            foreignField: "ID_Automovil",
-            as: "Automovil_Info",
-          },
-        },
-        {
-          $unwind: "$Automovil_Info",
-        },
-        {
-          $project: {
-            "Cliente_Info.ID_Cliente": 0,
-            "Automovil_Info.ID_Automovil": 0,
-          },
-        },
+          $project:{
+            _id:0,
+            "Reservas_Info._id":0
+
+          }
+        }
       ]).toArray();
       res.send(data);
   } catch (error) {

@@ -19,14 +19,17 @@ storageClientes.get("/", async (req,res)=>{
 })
 
 //clientes con el DNI específico
-storageClientes.get("/:dni", async (req,res)=>{
+storageClientes.get("/especifico", async (req,res)=>{
     try {
-        let {dni} = req.params;
+      console.log(req);
+        let {dni} = req.query;
         dni = parseInt(dni)
         const collection = db.collection("cliente");
-        const data = await collection.find({
+        const data = await collection.aggregate([{
+          $match:{
             DNI: {$eq: dni},
-          }).toArray();
+          }
+          }]).toArray();
         res.send(data);
     } catch (error) {
         res.send(error)
@@ -34,7 +37,7 @@ storageClientes.get("/:dni", async (req,res)=>{
 })
 
 //clientes que realizaron al menos un alquiler
-storageClientes.get("/alquiler/", async (req,res)=>{
+storageClientes.get("/alquiler", async (req,res)=>{
     try {
         const collection = db.collection("cliente");
         const data = await collection.aggregate([

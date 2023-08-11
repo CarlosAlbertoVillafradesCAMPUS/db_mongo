@@ -1155,41 +1155,21 @@ db.alquiler.find({
 /* 13.Listar las reservas pendientes realizadas por un cliente
 específico. */
 use("db_campus_alquiler");
-db.reserva.aggregate([
+db.cliente.aggregate([
+  {
+    $lookup: {
+      from: "reserva",
+      localField: "ID_Cliente",
+      foreignField: "ID_Cliente_id",
+      as: "Reserva_Info",
+    },
+  },
   {
     $match: {
-      Estado: "Pendiente",
-      ID_Cliente_id: 1,
+      "Reserva_Info.Estado": "Pendiente",
+      "Reserva_Info.ID_Cliente_id": 1,
     },
-  },
-  {
-    $lookup: {
-      from: "cliente",
-      localField: "ID_Cliente_id",
-      foreignField: "_id",
-      as: "Cliente_Info",
-    },
-  },
-  {
-    $unwind: "$Cliente_Info",
-  },
-  {
-    $lookup: {
-      from: "automovil",
-      localField: "ID_Automovil_id",
-      foreignField: "_id",
-      as: "Automovil_Info",
-    },
-  },
-  {
-    $unwind: "$Automovil_Info",
-  },
-  {
-    $project: {
-      "Cliente_Info.ID_Cliente": 0,
-      "Automovil_Info.ID_Automovil": 0,
-    },
-  },
+  }
 ]);
 
 /* 14.Mostrar los empleados con cargo de "Gerente" o "Asistente". */
