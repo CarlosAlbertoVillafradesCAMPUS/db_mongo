@@ -6,8 +6,11 @@ import {appMiddlewareAlquilerVerify} from "../middleware/alquilerVerify.js";
 const storageAlquiler = Router();
 const db = await con();
 
+storageAlquiler.use(configGet());
+storageAlquiler.use(appMiddlewareAlquilerVerify);
+
 //alquileres activos
-storageAlquiler.get("/",configGet(), appMiddlewareAlquilerVerify, async (req, res) => {
+storageAlquiler.get("/", async (req, res) => {
   if(!req.rateLimit) return; 
   try {
     const collection = db.collection("alquiler");

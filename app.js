@@ -13,8 +13,8 @@ const appExpress = express();
 
 appExpress.use(express.json());
 appExpress.use("/token", generarToken);
-appExpress.use("/automovil", storageAutomovil); 
-appExpress.use("/clientes", storageClientes);
+appExpress.use("/automovil", validarToken, storageAutomovil); 
+appExpress.use("/clientes", validarToken, storageClientes);
 appExpress.use("/alquiler", validarToken, storageAlquiler);
 appExpress.use("/reserva", storageReserva);
 appExpress.use("/empleado", storageEmpleado);

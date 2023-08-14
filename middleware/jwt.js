@@ -4,6 +4,7 @@ import {plainToClass, classToPlain} from "class-transformer"
 import {SignJWT, jwtVerify} from "jose";
 import {Router} from "express";
 import {dtoAlquiler} from "../routers/controller/dtoAlquiler.js";
+import {dtoAutomovil} from "../routers/controller/dtoAutomovil.js";
 
 dotenv.config("../");
 const generarToken = Router();
@@ -11,7 +12,8 @@ const validarToken = Router();
 
 const structurasDto = (collect) => {
     const instCollect = {
-        "alquiler": dtoAlquiler
+        "alquiler": dtoAlquiler,
+        "automovil": dtoAutomovil
     };
 
     const myCollect = instCollect[collect];

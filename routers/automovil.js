@@ -1,13 +1,17 @@
 import {Router} from "express";
 import { configGet } from "../middleware/limit.js";
-import {con} from "../db/connect.js"
+import {appMiddlewareAutomovilVerify} from "../middleware/automovilVerify.js";
+import {con} from "../db/connect.js";
 
 let db = await con();
 let storageAutomovil = Router();
-storageAutomovil.use(configGet())
+storageAutomovil.use(configGet());
+storageAutomovil.use(appMiddlewareAutomovilVerify);
+
 
 //automoviles disponibles
 storageAutomovil.get("/", async (req,res)=>{
+  if(!req.rateLimit) return; 
     try {
         const collection = db.collection("automovil");
         const data = await collection.aggregate([
@@ -51,7 +55,7 @@ storageAutomovil.get("/capacidadMayor", async (req,res)=>{
       const collection = db.collection("automovil");
       const data = await collection.aggregate([{
         $match:{
-          Capacidad: { $gt: 2}
+          Capacidad: { $gt: 5}
         }
       },
     {
