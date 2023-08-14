@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import {generarToken, validarToken} from "./middleware/jwt.js"
 import storageAutomovil from "./routers/automovil.js";
 import storageClientes from "./routers/clientes.js";
 import storageAlquiler from "./routers/alquiler.js";
@@ -11,9 +12,10 @@ dotenv.config();
 const appExpress = express();
 
 appExpress.use(express.json());
-appExpress.use("/automovil", storageAutomovil);
+appExpress.use("/token", generarToken);
+appExpress.use("/automovil", storageAutomovil); 
 appExpress.use("/clientes", storageClientes);
-appExpress.use("/alquiler", storageAlquiler);
+appExpress.use("/alquiler", validarToken, storageAlquiler);
 appExpress.use("/reserva", storageReserva);
 appExpress.use("/empleado", storageEmpleado);
 appExpress.use("/sucursal", storageSucursal);
