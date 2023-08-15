@@ -1,14 +1,7 @@
-# Mongo DB
+# mongoAlquiler
+## Descripcion
 
-Se realizo una proyecto en el que creamos una base de datos en mongo db y se realizaron algunas consultas para la practica. 
-
-## Importante
-
-Para utilizar mongo en visual estudio es esencial instalar la extencion de "MongoDB for Visual Studio Code".
-
-### Descripción de la funcionalidad
-
-El código proporciona ejemplos de cómo crear colecciones e insertar documentos en MongoDB. A continuación, se enumeran las colecciones creadas y los documentos insertados:
+se creo una base de datos con mongoDB sobre el funcionamiento de un alquiler y reserva de automoviles, con sus respectivas consultas. A continuación, se enumeran las colecciones creadas y los documentos insertados:
 
 1. **sucursal:** Contiene información sobre diferentes sucursales, como su nombre, dirección y teléfono.
 2. **automovil:** Almacena datos sobre los automóviles disponibles para alquiler, incluida su marca, modelo, año, tipo, capacidad y precio diario.
@@ -20,33 +13,93 @@ El código proporciona ejemplos de cómo crear colecciones e insertar documentos
 8. **registro_entrega:** Registra la entrega de un automóvil al cliente al finalizar un alquiler, incluida la fecha de entrega, cantidad de combustible entregado y kilometraje entregado.
 9. **registro_devolucion:** Registra la devolución de un automóvil por parte del cliente al finalizar un alquiler, incluida la fecha de devolución, cantidad de combustible devuelto, kilometraje devuelto y monto adicional si corresponde.
 
-### Consultas
+![xd](./assets/Screenshot_2023-07-31_091436.png)
 
-En el codigo en la seccion de consultas, nos podemos encontrar con las siguientes consultas:
+## Requisitos previos
 
-1. Listar todos los clientes registrados en la base de datos.
-2. Obtener todos los automóviles disponibles para alquiler.
-3. Listar todos los alquileres activos junto con los datos de los clientes relacionados.
-4. Mostrar todas las reservas pendientes con los datos del cliente y el automóvil reservado.
-5. Obtener los detalles del alquiler con un ID_Alquiler específico.
-6. Listar los empleados con el cargo de "Vendedor".
-7. Mostrar la cantidad total de automóviles disponibles en cada sucursal junto con su dirección.
-8. Obtener el costo total de un alquiler específico.
-9. Listar los clientes con el DNI específico.
-10. Mostrar todos los automóviles con una capacidad mayor a 5 personas.
-11. Obtener los detalles del alquiler que tiene fecha de inicio en '2023-07-05'.
-12. Listar las reservas pendientes realizadas por un cliente específico.
-13. Mostrar los empleados con cargo de "Gerente" o "Asistente".
-14. Obtener los datos de los clientes que realizaron al menos un alquiler.
-15. Listar todos los automóviles ordenados por marca y modelo.
-16. Mostrar la cantidad total de automóviles en cada sucursal junto con su dirección.
-17. Obtener la cantidad total de alquileres registrados en la base de datos.
-18. Mostrar los automóviles con capacidad igual a 5 personas y que estén disponibles.
-19. Listar los alquileres con fecha de inicio entre '2023-07-05' y '2023-07-10'.
+- Node.js instalado en tu máquina.
 
-Cada consulta utiliza comandos de MongoDB adecuados para obtener la información requer
+## Instalación
 
-ida y mostrarla en la terminal de Visual Studio Code.
+1. Clona este repositorio o descarga los archivos en tu máquina local.
+2. Abre una terminal en el directorio raíz de la aplicación.
+3. Ejecuta el siguiente comando para instalar las dependencias:
+
+```
+npm install
+```
+
+## Configuración
+
+1. Crea una copia del archivo `.env.example`  con el nombre `.env` en el directorio raíz de la aplicación.
+2. El archivo `.env` , viene con las iguientes varibales definidas:
+
+```
+MY_CONFIG={"hostname":"127.17.0.92", "port":5017}
+MY_CONNECT= {"user": "cavillafrades", "password":"1005344957", "nameDB": "db_campus_alquiler"}
+MY_JWT="villafrades"
+```
+
+De esa manera podremos acceder a la base de datos que hemos creado y sus registros por defectos.
+
+3. Ahora corremos enla terminal el comando **npm run dev**.
+
+4. Revisar que el "hostname" y el "port" no se encuentren en uso, en caso de generar algun error cambiar esos datos en el archivo `.env`.
+
+   #### Ubicacion db
+
+   - La creacion de nuestra base de datos e insercion de registros se ecuentran en la ruta **db/query.mongodb**
+   - Nuestras consultas se encuentran en la ruta **db/consultas.mongodb**
+
+### Importante antes de empezar
+
+Antes de empezar a realizar las consultas debemosos generar un token de acceso para cada una de las collecciones. Este token debemos colocarlo en nuestro **header/Autorization**, este token tiene un limite de **30m** por colleccion, en ese rango de tiempo podremos acceder a las consultas de dicha colleccion.
+
+- para generar nuestro token, debemos acceder a nuestra extencion de visual estudio llamada **Thunder-Client**, colocar la siguiente ruta:
+
+  `GET: http://"hostname":"port"/token/"nombreColleccion"`
+
+- Una vez generado el token de respectiva collecion podemos acceder a los Endpoints de esas colleccion 
+
+## COLLECTIONS Y ENDPOINTS
+
+### alquiler
+
+- `http://"hostname":"port"/alquiler/` Listar todos los alquileres activos junto con los datos de los clientes relacionados.
+- `http://"hostname":"port"/alquiler/detalles?id=""` Obtener los detalles del alquiler con el ID_Alquiler específico.
+- `http://"hostname":"port"/alquiler/costoTotal?id=""` Obtener el costo total de un alquiler específico.
+- `http://"hostname":"port"/alquiler/fechas/fecha_inicio=""` Obtener los detalles del alquiler que tiene fecha de inicio en '2023-07-05'.
+- `http://"hostname":"port"/alquiler/cantidad` Cantidad total de alquileres registrados.
+
+- `http://"hostname":"port"/alquiler/rango` Listar los alquileres con fecha de inicio entre '2023-07-05' y '2023-07-10'.
+
+### automovil
+
+- `http://"hostname":"port"/automovil/` Obtener todos los automóviles disponibles para alquiler
+- `http://"hostname":"port"/automovil/capacidadMayor/"#personas"` Todos los automóviles con una capacidad mayor a X personas.
+- `http://"hostname":"port"/automovil/ordenados` Automóviles ordenados por marca y modelo.
+- `http://"hostname":"port"/automovil/sucursal` Cantidad total de automóviles en cada sucursal junto con su dirección
+- `http://"hostname":"port"/automovil/disponibles?capacidad=""` Automóviles con capacidad igual a x personas y que estén disponibles.
+
+### clientes
+
+- `http://"hostname":"port"/clientes/` Mostrar todos los clientes registrados en la base de datos.
+- `http://"hostname":"port"/clientes/especifico/dni=""` Clientes con el DNI específico.
+- `http://"hostname":"port"/clientes/alquiler` Clientes que realizaron al menos un alquiler.
+
+### empleado
+
+- `http://"hostname":"port"/empleado/` Listar los empleados con el cargo de "Vendedor".
+- `http://"hostname":"port"/empleado/cargoEspecial` Listar los empleados con cargo de "Gerente" o "Asistente"
+
+### reserva
+
+- `http://"hostname":"port"/reserva/` Reserva pendientes.
+- `http://"hostname":"port"/reserva/pendiente?id_cliente=""` Reservas pendientes realizadas por un cliente especifico
+
+### sucursal
+
+- `http://"hostname":"port"/sucursal` Cantidad total de automóviles disponibles en cada sucursal
 
 ## Contacto
 

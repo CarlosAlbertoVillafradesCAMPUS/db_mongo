@@ -50,9 +50,11 @@ storageAutomovil.get("/", async (req,res)=>{
 })
 
 // todos los automóviles con una capacidad mayor a 5 personas
-storageAutomovil.get("/capacidadMayor", async (req,res)=>{
+storageAutomovil.get("/capacidadMayor/:capacidad", async (req,res)=>{
   if(!req.rateLimit) return; 
   try {
+    let {capacidad} = req.params;
+    capacidad = parseInt(capacidad);
       const collection = db.collection("automovil");
       const data = await collection.aggregate([{
         $match:{
