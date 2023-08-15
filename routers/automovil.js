@@ -106,9 +106,27 @@ storageAutomovil.get("/sucursal", async (req,res)=>{
       const data = await collection.aggregate([
         {
             $group: {
-                "ID_Sucursal": "$ID_Sucursal",
-                "Cantidad_Total_Disponible": { $sum: "$Cantidad_Disponible" }
+                "_id": "$ID_Sucursal_id",
+                "Cantidad_Total_Disponible": { $sum: "$Cantidad_Disponible" },
             }
+        },
+        {
+          $lookup:{
+            from: "sucursal",
+            localField: "_id",
+            foreignField: "ID_Sucursal",
+            as: "Sucursal_info"
+          }
+        },
+        {
+          $unwind: "$Sucursal_info"
+        },
+        {
+          $project:{
+            _id:0,
+            "Sucursal_info.Direccion": 1,
+            "Cantidad_Total_Disponible": "$Cantidad_Total_Disponible",
+          }
         }
     ]).toArray();
       res.send(data);

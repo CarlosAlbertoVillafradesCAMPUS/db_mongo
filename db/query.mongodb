@@ -50,10 +50,7 @@ db.createCollection("automovil", {
                 bsonType: "string",
                 maxLength: 8,
                 pattern: "^[A-Z0-9]+$",
-                description:{
-                  status: 402,
-                  message: "Error en los parametros de entrada: 'ID_Automovil'"
-                } 
+                description:"Error en los parametros de entrada: 'ID_Automovil'"
              },
              Marca: {
                 bsonType: "string",
@@ -205,11 +202,13 @@ db.createCollection("alquiler", {
                 description: "Error en los parametros de entrada: 'ID_Automovil'"
            },
              Fecha_Inicio: {
-                bsonType: "date",
+                bsonType: "string",
+                maxLength: 10,
                 description: "Error en los parametros de entrada: 'Fecha_Inicio'"
             },
             Fecha_Fin: {
-              bsonType: "date",
+              bsonType: "string",
+              maxLength: 10,
               description: "Error en los parametros de entrada: 'Fecha_Fin'"
             },
             Costo_Total: {
@@ -255,15 +254,18 @@ db.createCollection("reserva", {
                 description: "Error en los parametros de entrada: 'ID_Automovil'"
            },
               Fecha_Reserva: {
-                bsonType: "date",
+                bsonType: "string",
+                maxLength: 10,
                 description: "Error en los parametros de entrada: 'Fecha_Reserva'"
             },
              Fecha_Inicio: {
-                bsonType: "date",
+                bsonType: "string",
+                maxLength: 10,
                 description: "Error en los parametros de entrada: 'Fecha_Inicio'"
             },
             Fecha_Fin: {
-              bsonType: "date",
+              bsonType: "string",
+              maxLength: 10,
               description: "Error en los parametros de entrada: 'Fecha_Fin'"
             },
             Estado: {
@@ -357,7 +359,7 @@ db.createCollection("registro_entrega", {
                 description: "Error en los parametros de entrada: 'ID_Empleado'"
            },
            Fecha_Entrega: {
-                bsonType: "date",
+                bsonType: "string",
                 description: "Error en los parametros de entrada: 'Fecha_Entrega'"
             },
             Combustible_Entregado: {
@@ -400,7 +402,7 @@ db.createCollection("registro_devolucion", {
                 description: "Error en los parametros de entrada: 'ID_Empleado'"
            },
            Fecha_Devolucion: {
-                bsonType: "date",
+                bsonType: "string",
                 description: "Error en los parametros de entrada: 'Fecha_Devolucion'"
             },
             Combustible_Devuelto: {
@@ -478,7 +480,7 @@ db.automovil.insertMany([
     Modelo: "Fiesta",
     Anio: 2020,
     Tipo: "Automovil",
-    Capacidad: 4,
+    Capacidad: 5,
     Precio_Diario: 600000,
   },
   {
@@ -585,8 +587,8 @@ db.alquiler.insertMany([
     ID_Alquiler: 1,
     ID_Cliente_id: 1,
     ID_Automovil_id: "CAR78",
-    Fecha_Inicio: new Date("2023-07-15"),
-    Fecha_Fin: new Date("2023-07-20"),
+    Fecha_Inicio: "2023-07-05",
+    Fecha_Fin: "2023-07-20",
     Costo_Total: 250005,
     Estado: "Activo",
   },
@@ -594,8 +596,8 @@ db.alquiler.insertMany([
     ID_Alquiler: 2,
     ID_Cliente_id: 2,
     ID_Automovil_id: "VIL74",
-    Fecha_Inicio: new Date("2023-08-05"),
-    Fecha_Fin: new Date("2023-08-12"),
+    Fecha_Inicio: "2023-08-05",
+    Fecha_Fin: "2023-08-12",
     Costo_Total: 20052225,
     Estado: "Activo",
   },
@@ -603,8 +605,8 @@ db.alquiler.insertMany([
     ID_Alquiler: 3,
     ID_Cliente_id: 3,
     ID_Automovil_id: "PIN41",
-    Fecha_Inicio: new Date("2023-09-15"),
-    Fecha_Fin: new Date("2023-09-20"),
+    Fecha_Inicio: "2023-09-15",
+    Fecha_Fin: "2023-09-20",
     Costo_Total: 255411,
     Estado: "Inactivo",
   },
@@ -612,8 +614,8 @@ db.alquiler.insertMany([
     ID_Alquiler: 4,
     ID_Cliente_id: 4,
     ID_Automovil_id: "PER89",
-    Fecha_Inicio: new Date("2023-12-20"),
-    Fecha_Fin: new Date("2023-12-31"),
+    Fecha_Inicio: "2023-12-20",
+    Fecha_Fin: "2023-12-31",
     Costo_Total: 50026658,
     Estado: "Inactivo",
   },
@@ -621,8 +623,8 @@ db.alquiler.insertMany([
     ID_Alquiler: 5,
     ID_Cliente_id: 1,
     ID_Automovil_id: "LLO69",
-    Fecha_Inicio: new Date("2023-08-15"),
-    Fecha_Fin: new Date("2023-08-20"),
+    Fecha_Inicio: "2023-08-15",
+    Fecha_Fin: "2023-08-20",
     Costo_Total: 2505555,
     Estado: "Inactivo",
   },
@@ -630,8 +632,8 @@ db.alquiler.insertMany([
     ID_Alquiler: 6,
     ID_Cliente_id: 2,
     ID_Automovil_id: "CAR78",
-    Fecha_Inicio: new Date("2023-09-15"),
-    Fecha_Fin: new Date("2023-09-20"),
+    Fecha_Inicio: "2023-09-15",
+    Fecha_Fin: "2023-09-20",
     Costo_Total: 25002585,
     Estado: "Inactivo",
   },
@@ -643,36 +645,36 @@ db.reserva.insertMany([
     ID_Reserva: 1,
     ID_Cliente_id: 1,
     ID_Automovil_id: "CAR78",
-    Fecha_Reserva: new Date("2023-07-15"),
-    Fecha_Inicio: new Date("2024-01-15"),
-    Fecha_Fin: new Date("2024-01-20"),
+    Fecha_Reserva: "2023-07-15",
+    Fecha_Inicio: "2024-01-15",
+    Fecha_Fin: "2024-01-20",
     Estado: "Pendiente",
   },
   {
     ID_Reserva: 2,
     ID_Cliente_id: 2,
     ID_Automovil_id: "VIL74",
-    Fecha_Reserva: new Date("2023-09-15"),
-    Fecha_Inicio: new Date("2024-02-15"),
-    Fecha_Fin: new Date("2024-02-20"),
+    Fecha_Reserva: "2023-09-15",
+    Fecha_Inicio: "2024-02-15",
+    Fecha_Fin: "2024-02-20",
     Estado: "Pendiente",
   },
   {
     ID_Reserva: 3,
     ID_Cliente_id: 3,
     ID_Automovil_id: "PIN41",
-    Fecha_Reserva: new Date("2023-11-15"),
-    Fecha_Inicio: new Date("2024-02-15"),
-    Fecha_Fin: new Date("2024-02-20"),
+    Fecha_Reserva: "2023-11-15",
+    Fecha_Inicio: "2024-02-15",
+    Fecha_Fin: "2024-02-20",
     Estado: "Confirmado",
   },
   {
     ID_Reserva: 4,
     ID_Cliente_id: 4,
     ID_Automovil_id: "PER89",
-    Fecha_Reserva: new Date("2023-12-15"),
-    Fecha_Inicio: new Date("2023-03-15"),
-    Fecha_Fin: new Date("2023-03-20"),
+    Fecha_Reserva: "2023-12-15",
+    Fecha_Inicio: "2023-03-15",
+    Fecha_Fin: "2023-03-20",
     Estado: "Confirmado",
   },
 ]);
@@ -723,7 +725,7 @@ db.registro_entrega.insertMany([
     ID_Registro: 1,
     ID_Alquiler_id: 1,
     ID_Empleado_id: 1,
-    Fecha_Entrega: new Date("2023-12-15"),
+    Fecha_Entrega: "2023-12-15",
     Combustible_Entregado: 5.2,
     Kilometraje_Entregado: 10000,
   },
@@ -731,7 +733,7 @@ db.registro_entrega.insertMany([
     ID_Registro: 2,
     ID_Alquiler_id: 2,
     ID_Empleado_id: 2,
-    Fecha_Entrega: new Date("2023-10-15"),
+    Fecha_Entrega: "2023-10-15",
     Combustible_Entregado: 7.5,
     Kilometraje_Entregado: 12000,
   },
@@ -739,7 +741,7 @@ db.registro_entrega.insertMany([
     ID_Registro: 3,
     ID_Alquiler_id: 3,
     ID_Empleado_id: 3,
-    Fecha_Entrega: new Date("2023-11-15"),
+    Fecha_Entrega: "2023-11-15",
     Combustible_Entregado: 5.2,
     Kilometraje_Entregado: 15000,
   },
@@ -747,7 +749,7 @@ db.registro_entrega.insertMany([
     ID_Registro: 4,
     ID_Alquiler_id: 4,
     ID_Empleado_id: 4,
-    Fecha_Entrega: new Date("2023-10-15"),
+    Fecha_Entrega: "2023-10-15",
     Combustible_Entregado: 6.2,
     Kilometraje_Entregado: 20000,
   },
@@ -759,7 +761,7 @@ db.registro_devolucion.insertMany([
     ID_Registro: 1,
     ID_Alquiler_id: 1,
     ID_Empleado_id: 1,
-    Fecha_Devolucion: new Date("2024-01-15"),
+    Fecha_Devolucion: "2024-01-15",
     Combustible_Devuelto: 5.2,
     Kilometraje_Devuelto: 20000,
     Monto_Adicional: 20000,
@@ -768,7 +770,7 @@ db.registro_devolucion.insertMany([
     ID_Registro: 2,
     ID_Alquiler_id: 2,
     ID_Empleado_id: 2,
-    Fecha_Devolucion: new Date("2024-02-15"),
+    Fecha_Devolucion: "2024-02-15",
     Combustible_Devuelto: 5.0,
     Kilometraje_Devuelto: 22000,
     Monto_Adicional: 30000,
@@ -777,7 +779,7 @@ db.registro_devolucion.insertMany([
     ID_Registro: 3,
     ID_Alquiler_id: 3,
     ID_Empleado_id: 3,
-    Fecha_Devolucion: new Date("2024-05-15"),
+    Fecha_Devolucion: "2024-05-15",
     Combustible_Devuelto: 6.0,
     Kilometraje_Devuelto: 26000,
     Monto_Adicional: 10000,
@@ -786,7 +788,7 @@ db.registro_devolucion.insertMany([
     ID_Registro: 4,
     ID_Alquiler_id: 4,
     ID_Empleado_id: 4,
-    Fecha_Devolucion: new Date("2024-03-15"),
+    Fecha_Devolucion: "2024-03-15",
     Combustible_Devuelto: 5.0,
     Kilometraje_Devuelto: 30000,
     Monto_Adicional: 15000,
@@ -1171,7 +1173,7 @@ db.cliente.aggregate([
     $match: {
       "Reserva_Info.Estado": "Pendiente",
       "Reserva_Info.ID_Cliente_id": 1,
-    },
+    }
   }
 ]);
 

@@ -125,11 +125,12 @@ storageAlquiler.get("/fechas", async (req, res) => {
   if(!req.rateLimit) return; 
   try {
     let { fecha_inicio } = req.query;
+
     const collection = db.collection("alquiler");
 
     const data = await collection.aggregate([{
       $match:{
-        Fecha_Inicio: { $regex: "2023-08-05"}
+        Fecha_Inicio: { $regex: fecha_inicio}
       }
     }]).toArray();
 
@@ -140,7 +141,7 @@ storageAlquiler.get("/fechas", async (req, res) => {
 });
 
 //cantidad total de alquileres registrados
-storageAlquiler.get("/total", async (req, res) => {
+storageAlquiler.get("/cantidad", async (req, res) => {
   if(!req.rateLimit) return; 
   try {
     const collection = db.collection("alquiler");

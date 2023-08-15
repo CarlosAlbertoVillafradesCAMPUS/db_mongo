@@ -14,8 +14,10 @@ storageClientes.get("/", async (req,res)=>{
     try {
         const collection = db.collection("cliente");
         const data = await collection.aggregate([{
+          $project: {
+            _id:0
           }
-        ]).toArray();
+          }]).toArray();
         res.send(data);
     } catch (error) {
         res.send(error)
@@ -33,7 +35,12 @@ storageClientes.get("/especifico", async (req,res)=>{
           $match:{
             DNI: {$eq: dni},
           }
-          }]).toArray();
+          },
+        {
+          $project: {
+            _id:0
+          }
+        }]).toArray();
         res.send(data);
     } catch (error) {
         res.send(error)
@@ -59,6 +66,12 @@ storageClientes.get("/alquiler", async (req,res)=>{
                 Alquiler_Info: { $ne: [] },
               },
             },
+            {
+              $project: {
+                _id:0,
+                "Alquiler_Info._id":0
+              }
+            }
           ]).toArray();
         res.send(data);
     } catch (error) {
