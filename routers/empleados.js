@@ -1,10 +1,12 @@
 import {Router} from "express";
 import {con} from "../db/connect.js";
-import {configGet} from "../middleware/limit.js"
+import {configGet} from "../middleware/limit.js";
+import {appMiddlewareEmpleadosVerify} from "../middleware/empleadosVerify.js"
 
 const storageEmpleado = Router();
 const db = await con();
-storageEmpleado.use(configGet())
+storageEmpleado.use(configGet());
+storageEmpleado.use(appMiddlewareEmpleadosVerify);
 
 //Listar los empleados con el cargo de "Vendedor"
 storageEmpleado.get("/", async(req,res)=>{

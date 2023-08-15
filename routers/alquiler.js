@@ -99,17 +99,20 @@ storageAlquiler.get("/detalles", async (req, res) => {
 storageAlquiler.get("/costoTotal", async (req, res) => {
   if(!req.rateLimit) return; 
   try {
+    let {id} = req.query;
+    id = parseInt(id);
     const collection = db.collection("alquiler");
-    const data = await collection
-      .find(
-        {
-          ID_Alquiler: id,
-        },
-        {
-          Costo_Total: 1,
-        }
-      )
-      .toArray();
+    const data = await collection.aggregate([{
+      $match:{
+        ID_Alquiler: id
+      }
+    },
+  {
+    $project:{
+      _id: 0,
+      Costo_Total: 1
+    }
+  }]).toArray();
 
     res.send(data);
   } catch (error) {

@@ -16,9 +16,9 @@ appExpress.use("/token", generarToken);
 appExpress.use("/automovil", validarToken, storageAutomovil); 
 appExpress.use("/clientes", validarToken, storageClientes);
 appExpress.use("/alquiler", validarToken, storageAlquiler);
-appExpress.use("/reserva", storageReserva);
-appExpress.use("/empleado", storageEmpleado);
-appExpress.use("/sucursal", storageSucursal);
+appExpress.use("/reserva", validarToken, storageReserva);
+appExpress.use("/empleado", validarToken, storageEmpleado);
+appExpress.use("/sucursal", validarToken, storageSucursal);
 
 let config = JSON.parse(process.env.MY_CONFIG);
 appExpress.listen(config, ()=>console.log(`http://${config.hostname}:${config.port}`))

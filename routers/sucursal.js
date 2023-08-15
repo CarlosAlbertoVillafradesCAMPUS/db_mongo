@@ -1,13 +1,17 @@
 import {Router} from "express";
 import {con} from "../db/connect.js";
-import {configGet} from "../middleware/limit.js"
+import {configGet} from "../middleware/limit.js";
+import {appMiddlewareSucursalVerify} from "../middleware/sucursalVerify.js";
 
 const storageSucursal = Router();
 const db = await con();
-storageSucursal.use(configGet())
+
+storageSucursal.use(configGet());
+storageSucursal.use(appMiddlewareSucursalVerify);
 
 //cantidad total de automóviles disponibles en cada sucursal
 storageSucursal.get("/", async(req,res)=>{
+  if(!req.rateLimit) return; 
     try {
         const collection = db.collection("sucursal_automovil");
         const data = await collection.aggregate([

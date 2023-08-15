@@ -2,27 +2,25 @@
   "name": "db_mongo",
   "version": "1.0.0",
   "description": "Se realizo una proyecto en el que creamos una base de datos en mongo db y se realizaron algunas consultas para la practica.",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc -w",
-    "dev": "nodemon --quiet app.js"
+    "dev": "node --watch app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "5.1.6",
-    "body-parser": "^1.20.2",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.0",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-rate-limit": "^6.8.1",
-    "jose": "^4.14.4",
-    "mongodb": "^5.7.0",
-    "nodemon": "^3.0.1",
-    "reflect-metadata": "^0.1.13"
+    "class-transformer": "0.5.1",
+    "class-validator": "0.14.0",
+    "dotenv": "16.3.1",
+    "express": "4.18.2",
+    "express-rate-limit": "6.9.0",
+    "jose": "4.14.4",
+    "mongodb": "5.7.0",
+    "reflect-metadata": "0.1.13",
+    "typescript": "5.1.6"
   }
 }

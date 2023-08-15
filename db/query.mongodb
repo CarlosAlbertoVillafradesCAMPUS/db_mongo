@@ -1123,14 +1123,17 @@ db.sucursal_automovil.aggregate([
 
 /* 9. Obtener el costo total de un alquiler específico.*/
 use("db_campus_alquiler");
-db.alquiler.find(
-  {
-    _id: 2,
-  },
-  {
-    Costo_Total: 1,
+db.alquiler.aggregate([{
+  $match:{
+    ID_Alquiler: 1
   }
-);
+},
+{
+$project:{
+  _id: 0,
+  Costo_Total: 1
+}
+}]);
 
 /* 10.Listar los clientes con el DNI específico. */
 use("db_campus_alquiler");

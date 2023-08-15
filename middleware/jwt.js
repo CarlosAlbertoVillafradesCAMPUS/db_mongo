@@ -5,6 +5,10 @@ import {SignJWT, jwtVerify} from "jose";
 import {Router} from "express";
 import {dtoAlquiler} from "../routers/controller/dtoAlquiler.js";
 import {dtoAutomovil} from "../routers/controller/dtoAutomovil.js";
+import {dtoSucursal} from "../routers/controller/dtoSucursal.js";
+import {dtoClientes} from "../routers/controller/dtoClientes.js";
+import {dtoEmpleados} from "../routers/controller/dtoEmpleados.js";
+import {dtoReserva} from "../routers/controller/dtoReserva.js";
 
 dotenv.config("../");
 const generarToken = Router();
@@ -13,7 +17,11 @@ const validarToken = Router();
 const structurasDto = (collect) => {
     const instCollect = {
         "alquiler": dtoAlquiler,
-        "automovil": dtoAutomovil
+        "automovil": dtoAutomovil,
+        "sucursal": dtoSucursal,
+        "clientes": dtoClientes,
+        "empleado": dtoEmpleados,
+        "reserva": dtoReserva
     };
 
     const myCollect = instCollect[collect];

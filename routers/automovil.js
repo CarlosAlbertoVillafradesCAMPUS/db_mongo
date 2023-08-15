@@ -51,6 +51,7 @@ storageAutomovil.get("/", async (req,res)=>{
 
 // todos los automóviles con una capacidad mayor a 5 personas
 storageAutomovil.get("/capacidadMayor", async (req,res)=>{
+  if(!req.rateLimit) return; 
   try {
       const collection = db.collection("automovil");
       const data = await collection.aggregate([{
@@ -78,6 +79,7 @@ storageAutomovil.get("/capacidadMayor", async (req,res)=>{
 
 //automóviles ordenados por marca y modelo
 storageAutomovil.get("/ordenados", async (req,res)=>{
+  if(!req.rateLimit) return; 
   try {
       const collection = db.collection("automovil");
       const data = await collection.find().sort({
@@ -98,6 +100,7 @@ storageAutomovil.get("/ordenados", async (req,res)=>{
 
 //cantidad total de automóviles en cada sucursal junto con su dirección
 storageAutomovil.get("/sucursal", async (req,res)=>{
+  if(!req.rateLimit) return; 
   try {
       const collection = db.collection("sucursal_automovil");
       const data = await collection.aggregate([
@@ -122,6 +125,7 @@ storageAutomovil.get("/sucursal", async (req,res)=>{
 
 // automóviles con capacidad igual a 5 personas y que estén disponibles
 storageAutomovil.get("/disponibles", async (req,res)=>{
+  if(!req.rateLimit) return; 
   try {
     let {capacidad} = req.query;
     capacidad = parseInt(capacidad);
